@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Etch-A-Sketch</title>
+    </head>
+    <body>
+        <h1>Sketch Your Work Below!</h1>
+        <button onclick="clearPad()" style="margin-bottom: 20px;">Click here to clear the sketch pad<br> and create a new grid up to 150x150 boxes!</button>
+        <div id="main-container">
+        </div>
+        <script>
+            let idNumbers = 1;
+            let rows;
+            let columns;
+            
+            function createDivs(rows, columns){
+                if(rows > 150 || columns > 150) {
+                    alert("Select up to 150 rows and 150 columns, no more than that please!");
+                } else {
+                    if (document.contains(document.getElementById("inner-container"))) {
+                        document.getElementById("inner-container").remove();
+                    }
+                    const mainContainer = document.querySelector('#main-container');
+                    const innerContainer = document.createElement('div');
+                    innerContainer.id = 'inner-container';
+                    innerContainer.style.cssText = `display: grid; grid-template-columns: repeat(${columns}, 1fr); grid-template-rows: repeat(${rows}, 1fr);`;
+                    let boxMeasurement = window.innerWidth / columns;
+                    for(let i = 0; i < columns; i++){
+                        for(let k = 0; k < rows; k++){
+                            const box = document.createElement('div');
+                            box.className = 'single-box';
+                            box.id = `box${idNumbers}`;
+                            box.style.cssText = `box-sizing: border-box; height: ${boxMeasurement}px; border: 1px solid black; grid-column: ${i + 1}; grid-row: ${k + 1};`;
+                            innerContainer.appendChild(box);
+                            idNumbers++;
+                        }
+                    }
+                    mainContainer.appendChild(innerContainer);
+                    addEventListeners();
+                }
+            }
+            createDivs(16, 16);
+
+            function addEventListeners(){
+                let boxes = document.querySelectorAll('.single-box');
+                boxes.forEach((box) => {
+                    // and for each one we add a 'click' listener
+                    box.addEventListener("mouseover", function( event ) {   
+                    // highlight the mouseover target
+                    event.target.style.backgroundColor = "orange";
+                    }, false);
+                });
+            }
+            
+            function clearPad() {
+                idNumbers = 1;
+                rows = prompt("How many rows should the grid have?");
+                columns = prompt("How man columns should the grid have?");
+                createDivs(rows, columns);
+            }
+        </script>
+    </body>
+</html>
